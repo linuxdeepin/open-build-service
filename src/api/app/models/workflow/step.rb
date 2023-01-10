@@ -29,8 +29,15 @@ class Workflow::Step
                          else
                            scm_webhook.payload[:path_with_namespace]&.tr('/', ':')
                          end
+    # use for deepin
+    allow_topic_feature = scm_webhook.payload[:target_repository_full_name].start_with?("linuxdeepin/", "deepin-community/","peeweep-test/")
+    source_branch_name = scm_webhook.payload[:source_branch]
 
-    "#{target_project_base_name}:#{pr_subproject_name}:PR-#{scm_webhook.payload[:pr_number]}"
+    if allow_topic_feature && source_branch_name.start_with?("topic-")
+      "#{target_project_base_name}:topics:#{source_branch_name[6..]}"
+    else
+      "#{target_project_base_name}:#{pr_subproject_name}:PR-#{scm_webhook.payload[:pr_number]}"
+    end
   end
 
   def target_package
@@ -127,7 +134,8 @@ class Workflow::Step
           repo: { full_name: scm_webhook.payload[:source_repository_full_name] },
           sha: scm_webhook.payload[:commit_sha]
         }
-      }
+      },
+      target_repository_full_name: scm_webhook.payload[:target_repository_full_name]
     }.to_json
   end
 
