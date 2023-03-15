@@ -939,6 +939,7 @@ sub findfile {
   return $files{'snapcraft.yaml'} if $ext eq 'snapcraft';
   return (grep {/flatpak\.(?:ya?ml|json)$/} sort keys %$files)[0] if $ext eq 'flatpak';
   return (grep {/mkosi\.*/} sort keys %$files)[0] if $ext eq 'mkosi';
+  return $files{'linglong.yaml'} if $files{'linglong.yaml'} && $ext eq 'linglong';
 
   my $packid = $rev->{'package'};
   $packid = $1 if $rev->{'originpackage'} && $rev->{'originpackage'} =~ /:([^:]+)$/;
