@@ -1444,7 +1444,7 @@ while (1) {
   if (%badhost) {
     my $now = time();
     for (keys %badhost) {
-      if ($badhost{$_} + 24*3600 < $now) {
+      if ($badhost{$_} + 2*3600 < $now) {
         BSUtil::printlog("deleting badhost $_");
         delete $badhost{$_};
         $badhostchanged = 1;
